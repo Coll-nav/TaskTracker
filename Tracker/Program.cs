@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=tasks.db"));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

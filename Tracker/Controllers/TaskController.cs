@@ -1,6 +1,9 @@
 // Controllers/TasksController.cs
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Tracker.Models;
+using Tracker.Data;
+
 
 namespace TaskTracker.Api.Controllers;
 
