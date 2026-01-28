@@ -1,8 +1,29 @@
+# .NET Build Outputs
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+*.dll
+*.pdb
+*.exe
+*.cache
+*.resources
+
+# Visual Studio
 .vs/
+
+# Rider / IntelliJ
 .idea/
-bin/
-obj/
-bin/
-obj/
-.idea/
-.vs/
+*.sln.iml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# NuGet
+packages/
+
+# User files
+*.user
+*.suo
