@@ -11,51 +11,43 @@ namespace TaskTracker.Api.Controllers;
 [Route("api/[controller]")]
 public class TasksController : ControllerBase
 {
-    private static List<TaskItem> tasks = new()
+    private readonly AppDbContext _context;
+
+    public TasksController(AppDbContext context)
     {
-        new TaskItem { Id = 1, Title = "Задача 1", isTrue = true},
-        new TaskItem { Id = 2, Title = "Задача 2", isTrue = false},
-        new TaskItem { Id = 3, Title = "Задача 3", isTrue = true},
-    };
+        _context = context;
+    }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetTasks()
     {
+        var tasks = await _context.Tasks.ToListAsync();
         return Ok(tasks);
     }
 
-    [HttpDelete("id")]
-    
-    public IActionResult Delete(int id)
-    {
-        foreach (var task in tasks)
-        {
-            if (task.Id == id) 
-            {
-                tasks.Remove(task);
-                return CreatedAtAction(nameof(GetAll), task);
-            }
-        }
-        return NotFound();
-    }
-
     [HttpPost]
-    public IActionResult Add(TaskItem task)
+    public async Task<IActionResult> AddTask(TaskItem task)
     {
-        tasks.Add(task);
-        return CreatedAtAction(nameof(GetAll), task);
+        _context.Tasks.Add(task);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction(nameof(GetTaskById), new { id = task.Id }, task);
     }
 
-    [HttpGet("id")]
-    public IActionResult Check(int id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetTaskById(int id)
     {
-        foreach (var task in tasks )
-        {
-            if (task.Id == id)
-            {
-                return Ok(task);
-            }
-        }
-        return NotFound();
+        var task = await _context.Tasks.FindAsync(id);
+        if (task == null) return NotFound();
+        return Ok(task);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTask(int id)
+    {
+        var task = await _context.Tasks.FindAsync(id);
+        if (task == null) return NotFound();
+        _context.Tasks.Remove(task);
+        await _context.SaveChangesAsync();
+        return NoContent();
     }
 }

@@ -1,29 +1,44 @@
-# .NET Build Outputs
-[Dd]ebug/
-[Rr]elease/
 [Bb]in/
 [Oo]bj/
+[Dd]ebug/
+[Rr]elease/
 *.dll
 *.pdb
 *.exe
 *.cache
 *.resources
+*.user
+*.suo
+*.userosscache
 
-# Visual Studio
-.vs/
+*.db
+*.sqlite
+*.db-journal
+*.mdf
+*.ldf
 
-# Rider / IntelliJ
-.idea/
-*.sln.iml
+Migrations/
 
-# macOS
 .DS_Store
 .AppleDouble
 .LSOverride
+.Spotlight-V100
+.Trashes
 
-# NuGet
+.idea/
+*.sln.iml
+*.swp
+*.swo
+
+.vs/
+
 packages/
+*.nupkg
+.nuget/
 
-# User files
-*.user
-*.suo
+/publish/
+/Published/
+
+*.tmp
+*.temp
+[Tt]emp/
