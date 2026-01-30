@@ -4,6 +4,6 @@ public class TaskItem
 {
     public int Id { get; set; } //номер
     public string Title { get; set; } //название
-    public bool isTrue {get; set;} //выполнено или нет
+    public bool isTrue {get; set;} //выполнено ли
     
 }

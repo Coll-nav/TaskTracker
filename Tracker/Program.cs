@@ -56,5 +56,7 @@ app.MapControllerRoute(
         pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-
 app.Run();
+
+//что такое сваггер расписать как понимаю 
+//добавить в гит и проверка 
