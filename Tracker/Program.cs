@@ -40,11 +40,6 @@ else
 
 app.UseHttpsRedirection();
 
-/*app.UseHttpsRedirection(new HttpsRedirectionOptions
-{
-    HttpsPort = 5001 
-});*/
-
 app.UseRouting();
 
 app.UseAuthorization();
@@ -56,7 +51,7 @@ app.MapControllerRoute(
         pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-app.Run();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
-//что такое сваггер расписать как понимаю 
-//добавить в гит и проверка 
+app.Run();
