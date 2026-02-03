@@ -19,6 +19,11 @@ html {
 
 body {
   margin-bottom: 60px;
+  background: linear-gradient(135deg,
+  #f9f7fe 20%,    
+  #e3f2fd 50%, 
+  #f3e5f5 80% 
+  );
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -28,4 +33,31 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  position: fixed;
+  top: 15%;
+  left: 45%;
+  transform: translate(-20%, -40%);
+  z-index: 1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  letter-spacing: 1px;
+}
+#f_i{
+  position: absolute;
+  right: 15px;
+  font-size: 1.75rem;
+}
+#taskInput{
+  position: fixed;
+  top: 25%;
+  left: 30%;
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 14px;
+  font-size: 1.2rem;
 }

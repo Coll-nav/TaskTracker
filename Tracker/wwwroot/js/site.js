@@ -5,15 +5,16 @@ async function loadTasks() {
     const tasks = await res.json();
     const taskList = document.getElementById('taskList');
     taskList.innerHTML = '';
-    /*if (tasks.length === 0) {
+    
+    if (tasks.length === 0) {
         taskList.innerHTML = '<div>No tasks found.</div>';
         return;
-    }*/
+    }
+    
     tasks.forEach(task => {
         const div = document.createElement('div');
         div.className = 'task';
-        div.innerHTML = `${task.title} 
-        <button onclick="deleteTask(${task.id})">Удалить</button>`;
+        div.innerHTML = `${task.title} <button onclick="deleteTask(${task.id})">Удалить</button>`;
         taskList.appendChild(div);
     })
 }
@@ -30,7 +31,7 @@ async function addTask(){
     await loadTasks();
 }
 async function deleteTask(id){
-    await fetch(`${API_URL}/${id}`, {method: 'DELETE'});
-    await loadTasks();
+        await fetch(`${API_URL}/${id}`, {method: 'DELETE'});
+        await loadTasks();
 }
 loadTasks();

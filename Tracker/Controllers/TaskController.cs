@@ -22,7 +22,6 @@ public class TasksController : ControllerBase
     public async Task<IActionResult> GetTasks()
     {
         var tasks = await _context.Tasks.ToListAsync();
-        if (tasks.Count == 0) return Ok("Список задач пуст");
         return Ok(tasks);
     }
 
@@ -50,6 +49,6 @@ public class TasksController : ControllerBase
         if (task.isTrue) return BadRequest(new { message = "Нельзя удалить выполненную задачу" });
         _context.Tasks.Remove(task);
         await _context.SaveChangesAsync();
-        return Ok(new { message = $"Задача с номером {task.Id} успешно удалена" });
+        return NoContent();
     }
 }
