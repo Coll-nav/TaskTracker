@@ -1,5 +1,6 @@
 ﻿const API_URL = '/api/tasks';
-
+const icon =document.getElementById('f_i');
+icon.onclick = (e) => {location.reload();};
 async function loadTasks() {
     const res = await fetch(API_URL);
     const tasks = await res.json();
@@ -7,14 +8,14 @@ async function loadTasks() {
     taskList.innerHTML = '';
     
     if (tasks.length === 0) {
-        taskList.innerHTML = '<div>No tasks found.</div>';
+        taskList.innerHTML = '<div id="n_f">No tasks found.</div>';
         return;
     }
     
     tasks.forEach(task => {
         const div = document.createElement('div');
         div.className = 'task';
-        div.innerHTML = `${task.title} <button onclick="deleteTask(${task.id})">Удалить</button>`;
+        div.innerHTML = `<span class="task-text">${task.title}</span> <button class="btn_del" onclick="deleteTask(${task.id})">Удалить</button>`;
         taskList.appendChild(div);
     })
 }

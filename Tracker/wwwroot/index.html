@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8"/>
-    <title>Task Tracker</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/site.css"/>
-</head>
-<body>
-<i class="bi bi-align-top" id="f_i"></i>
-<h1>Task Tracker</h1>
-<input id="taskInput" type="text" placeholder="Введите задачу" />
-<button onclick="addTask()">Добавить</button>
-<h2>Список задач:</h2>
-<div id="taskList"></div>
-<script src="js/site.js"></script>
-</body>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Task Tracker</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="css/site.css"/>
+    </head>
+    <body>
+        <i class="bi bi-align-top" id="f_i"></i>
+        <h1>Task Tracker</h1>
+        <div class="container">
+            <input id="taskInput" type="text" placeholder="Введите задачу" />
+            <button id="add" onclick="addTask()">Добавить</button>
+        </div>
+        <div class="list_container">
+            <div class="list-header">
+                <h2>Список задач:</h2>
+            </div>
+            <div id="taskList"></div>
+        </div>
+    <script src="js/site.js"></script>
+    </body>
 </html>

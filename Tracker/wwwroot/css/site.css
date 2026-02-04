@@ -40,7 +40,7 @@ h1 {
   font-weight: 800;
   margin-bottom: 10px;
   position: fixed;
-  top: 15%;
+  top: 10%;
   left: 45%;
   transform: translate(-20%, -40%);
   z-index: 1;
@@ -50,14 +50,114 @@ h1 {
 #f_i{
   position: absolute;
   right: 15px;
-  font-size: 1.75rem;
+  font-size: 2rem;
+}
+.container{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  padding: 150px;
+  gap: 10px;
 }
 #taskInput{
-  position: fixed;
-  top: 25%;
-  left: 30%;
   width: 100%;
   max-width: 400px;
   padding: 10px 14px;
   font-size: 1.2rem;
+}
+#add{
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 3px 12px 12px 3px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.list_container {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  max-width: 900px;
+  margin: -150px auto 0;
+  padding: 0 20px;
+  transform: translateX(-60px);
+}
+.list-header{
+  width: 200px;
+  padding-top: 10px;
+}
+.list_container h2{
+  font-size: 1.7rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  transform: translateX(-80px);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: right;
+  white-space: nowrap;
+}
+
+#taskList{
+  margin-top: 20px;
+  flex: 1;
+  max-width: 500px;
+  min-height: 200px;
+}
+.task{
+  background: whitesmoke;
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+  display: flex;
+  align-items: center;  
+  justify-content: space-between;
+}
+.task:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+.task-text{
+  font-size: 1.5rem;
+  color: #333;
+  flex: 1;
+  padding-left: 15px;
+  position: relative;
+}
+.task-text::before{
+  content: '•';
+  position: absolute;
+  left: 0;
+  padding: 0 -15px;
+  color: black;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+.btn_del{
+  font-size: 0.9rem;
+  padding: 8px 15px;
+  background: linear-gradient(90deg, #ff6b6b, #ff4757);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn_del:hover{
+  background: linear-gradient(90deg, #ff4757, #ff3333);
+}
+#n_f{
+  margin-top: 17px;
+  font-size: 1.1rem;
+  text-align: center;
+  color: black;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  border: 2px dashed #ddd;
 }
