@@ -41,6 +41,18 @@ public class TasksController : ControllerBase
         return Ok(task);
     }
 
+    [HttpPut("{id}")] // изменение задачи по id
+    public async Task<IActionResult> UpdateTask(int id, [FromBody] TaskItem updatedTask)
+    {
+        if(!ModelState.IsValid) return BadRequest(ModelState); //прошли ли данные валидацию
+        var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id); 
+        if (task == null) return NotFound(new { message = "Задача не найдена" });
+        task.Title = updatedTask.Title;
+        task.isTrue = updatedTask.isTrue;
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+
     [HttpDelete("{id}")] // удаление задачи по id
     public async Task<IActionResult> DeleteTask(int id)
     {
