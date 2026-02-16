@@ -58,7 +58,7 @@ function updateTaskStatus(id, isTrue, Title){
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({id: id, title: Title, isTrue: isTrue}),
     })
-    .then (res => {
+    .then (res => { //после того как обещание завершилось, обрабатываем ответ
         if(!res.ok) throw new Error('Ошибка при обновлении');
         loadTasks();
         })
@@ -67,6 +67,7 @@ function updateTaskStatus(id, isTrue, Title){
     });
     return document.querySelector(`#task-title-${id}`).innerText;
 }
+//функция по изменению текста
 function editTask(id){
     const titleElement = document.querySelector(`#task-title-${id}`);
     const currentTitle = titleElement.innerText;
@@ -76,8 +77,9 @@ function editTask(id){
     editBtn.classList.add('save_mode');
     editBtn.onclick = () => SaveTask(id);
 }
+//функция по сохранению текста
 function SaveTask(id){
-    const input = document.querySelector(`#edit-input-${id}`);
+    const input = document.querySelector(`#edit-input-${id}`); //ищет первый элемент, который соотвеетсвует данному селектору
     const newTitle = input.value.trim();
     
     if(newTitle.trim() === ''){
