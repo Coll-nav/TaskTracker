@@ -11,16 +11,29 @@
         <div id="title_h1">
             <h1>Task Tracker</h1>
         </div>
+        <!--Основное поле для ввода задачи -->
         <div class="container">
             <input id="taskInput" type="text" placeholder="Введите задачу" />
             <button id="add" onclick="addTask()">Добавить</button>
         </div>
+        <!--Главня задача -->
         <div class="list_container">
             <div class="list-header">
                 <h2>Список задач:</h2>
             </div>
             <div id="taskList"></div>
         </div>
-    <script src="js/site.js"></script>
+        <!--Для тегов контейнер -->
+        <div>
+            <input id="tagInput" type="text" placeholder="Введите тег" />
+            <button onclick="CreatedTag()">Добавить</button>
+            <div id="tags-container">
+                <div class="tags-section"></div>
+            </div>
+        </div>
+        <script src="js/site.js"></script>
+        <script src="js/subtask.js"></script>
+        <script src="js/comment.js"></script>
+        <script src="js/tags.js"></script>
     </body>
 </html>

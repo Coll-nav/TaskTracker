@@ -185,3 +185,21 @@ h1 {
   font-size: 0.75rem;
   background: linear-gradient(135deg, #2a8bf2, #198754);
 }
+.subtask {
+  display: block;        
+  width: 100%;           
+  margin: 5px 0;        
+  padding: 5px;          
+  border-bottom: 1px solid #eee;
+}
+.sub_btn_del{
+  font-size: 0.8rem;
+  padding: 2px 5px;
+  background: linear-gradient(90deg, #ff6b6b, #ff4757);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}

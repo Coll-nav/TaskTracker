@@ -1,5 +1,5 @@
 ﻿const API_URL = '/api/tasks';
-const icon =document.getElementById('f_i');
+const icon = document.getElementById('f_i');
 icon.onclick = (e) => {location.reload();};
 async function loadTasks() {  //асинхронный метод просмотра всех задач
     const res = await fetch(API_URL); //запрос на получение информации с бд и ждем
@@ -15,14 +15,19 @@ async function loadTasks() {  //асинхронный метод просмот
     tasks.forEach(task => {
         const div = document.createElement('div');
         div.className = 'task';
+        div.id = 'task-list-' + task.id;
         div.innerHTML = `
         <span class="task-text" id="task-title-${task.id}">${task.title}</span>
+        <button class="sub_btn" id="sub-btn-${task.id}" onclick="AddSubTask(${task.id})">Добавить Подзадачу</button>
         <button class="edit_btn" id="edit-btn-${task.id}" onclick="editTask(${task.id})">Изменить</button> 
-        <button class="btn_del" onclick="deleteTask(${task.id})">Удалить</button>`;
+        <button class="btn_del" onclick="deleteTask(${task.id})">Удалить</button>
+        <button class="sub_list" id="" onclick="loadSubtasks(${task.id})">Подзадачи</button>
+        <button class="add_com" id="cc" onclick="loadComments(${task.id})">Комментарии</button>`;
         taskList.appendChild(div);
     })
 }
-async function addTask(){ //функция для добавления задачи
+
+async function addTask() { //функция для добавления задачи
     const input = document.getElementById('taskInput');
     const title = input.value.trim(); //считывает текст, удаляя пробелы вначале и в конце
     if(!title) return;

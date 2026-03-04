@@ -5,7 +5,7 @@ using Tracker.Data;
 namespace TaskTracker.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/subtasks")]
 
 public class SubTaskController : ControllerBase
 {
@@ -16,6 +16,16 @@ public class SubTaskController : ControllerBase
         _context = context;
     }
 
+    [HttpGet("{taskId}")]
+    public async Task<IActionResult> GetSubTask(int taskId)
+    {
+        var subtasks = await _context.SubTasks
+            .Where(x => x.TaskId == taskId)
+            .ToListAsync();
+        return Ok(subtasks);
+    }
+    
+    //косяк с добавлением подзадачи, id изменяется если мы переходи на новую задачи
     [HttpPost("{taskId}/subtask")]
     public async Task<IActionResult> AddSubTask(int taskId, SubTask task)
     {
@@ -23,6 +33,7 @@ public class SubTaskController : ControllerBase
         if(parentTask == null) return NotFound("Parent task not found");
         task.TaskId = taskId;
         _context.SubTasks.Add(task);
+        var co = await _context.SubTasks.CountAsync();
         await _context.SaveChangesAsync();
         return Ok(new {message = "Подзадача добавлена"});
     }

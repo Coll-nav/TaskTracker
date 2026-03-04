@@ -5,7 +5,7 @@ using Tracker.Data;
 namespace TaskTracker.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/comments")]
 
 public class CommentController : ControllerBase
 {
@@ -14,6 +14,15 @@ public class CommentController : ControllerBase
     public CommentController(AppDbContext context)
     {
         _context = context;
+    }
+    
+    [HttpGet("{taskId}")]
+    public async Task<IActionResult> GetComments(int taskId)
+    {
+        var comments = await _context.Comments
+            .Where(c => c.TaskId == taskId)
+            .ToListAsync();
+        return Ok(comments);
     }
 
     [HttpPost("{taskId}")]
