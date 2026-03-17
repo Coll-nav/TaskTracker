@@ -53,7 +53,6 @@ public class TasksController : ControllerBase
                 Id = t.Id,
                 Title = t.Title,
                 Status = t.Status.ToString(),
-                CreatedAt = t.CreatedAt,
                 SubTaskCount = t.SubTasks.Count,
                 SubTaskCountDone = t.SubTasks.Count(s => s.isDone),
                 CommentsCount = t.Comments.Count,
@@ -64,7 +63,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpPost] //добавление задачи 
-    public async Task<IActionResult> AddTask(TaskItem task)
+    public async Task<IActionResult> AddTask([FromBody] TaskItem task)
     {
         task.SubTasks = new List<SubTask>();
         task.Tags = new List<Tag>();
@@ -89,7 +88,6 @@ public class TasksController : ControllerBase
                 Id = t.Id,
                 Title = t.Title,
                 Status = t.Status.ToString(),
-                CreatedAt = t.CreatedAt,
                 SubTasks = t.SubTasks.Select(s => new SubTaskDto
                 {
                     Id = s.SubTaskId,
@@ -164,5 +162,28 @@ public class TasksController : ControllerBase
         _context.Tasks.Remove(task);
         await _context.SaveChangesAsync();
         return NoContent();
+    }
+    
+    [HttpPost("{id}/complete")]
+    public async Task<IActionResult> CompleteTask(int id)
+    {
+        var task = await _context.Tasks.FindAsync(id);
+        if (task == null) return NotFound();
+    
+        task.CreatedAt = DateTime.Now;
+        await _context.SaveChangesAsync();
+    
+        return Ok(new { completedAt = task.CreatedAt });
+    }
+
+    [HttpPost("{id}/incomplete")]
+    public async Task<IActionResult> IncompleteTask(int id)
+    {
+        var task = await _context.Tasks.FindAsync(id);
+        if (task == null) return NotFound();
+        
+        await _context.SaveChangesAsync();
+    
+        return Ok();
     }
 }

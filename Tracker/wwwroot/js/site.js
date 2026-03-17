@@ -1,96 +1,187 @@
 ﻿const API_URL = '/api/tasks';
 const icon = document.getElementById('f_i');
 icon.onclick = (e) => {location.reload();};
-async function loadTasks() {  //асинхронный метод просмотра всех задач
-    const res = await fetch(API_URL); //запрос на получение информации с бд и ждем
-    const tasks = await res.json(); //парсим весь текст в формат json
+
+async function loadTasks() {
+    const res = await fetch(API_URL);
+    const tasks = await res.json();
     const taskList = document.getElementById('taskList');
-    taskList.innerHTML = ''; //очищаем контейнер перед добавлением каждой задачи
-    
+    taskList.innerHTML = '';
+
     if (tasks.length === 0) {
         taskList.innerHTML = '<div id="n_f">No tasks found.</div>';
         return;
     }
-    
+
     tasks.forEach(task => {
         const div = document.createElement('div');
         div.className = 'task';
         div.id = 'task-list-' + task.id;
-        div.innerHTML = `
-        <span class="task-text" id="task-title-${task.id}">${task.title}</span>
-        <button class="sub_btn" id="sub-btn-${task.id}" onclick="AddSubTask(${task.id})">Добавить Подзадачу</button>
-        <button class="edit_btn" id="edit-btn-${task.id}" onclick="editTask(${task.id})">Изменить</button> 
-        <button class="btn_del" onclick="deleteTask(${task.id})">Удалить</button>
-        <button class="sub_list" id="" onclick="loadSubtasks(${task.id})">Подзадачи</button>
-        <button class="add_com" id="cc" onclick="loadComments(${task.id})">Комментарии</button>`;
+        div.dataset.taskId = task.id;
+
+        // Контейнер для тегов
+        const tagsContainer = document.createElement('div');
+        tagsContainer.className = 'task-tags-container';
+
+        // Контейнер для основного содержимого
+        const contentContainer = document.createElement('div');
+        contentContainer.className = 'task-content';
+
+        // Текст задачи
+        const taskText = document.createElement('span');
+        taskText.className = 'task-text';
+        taskText.id = 'task-title-' + task.id;
+        taskText.textContent = task.title;
+
+        const input_all = document.createElement('input');
+        input_all.id = `task-right-container-${task.id}`;
+        input_all.type = 'text';
+        input_all.placeholder = 'Введите...';
+
+        // Контейнер для кнопок
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.className = 'task-buttons';
+
+        
+        const subBtn = document.createElement('button');
+        subBtn.className = 'sub_btn';
+        subBtn.id = 'sub-btn-' + task.id;
+        subBtn.onclick = () => AddSubTask(task.id);
+        subBtn.textContent = 'Добавить Подзадачу';
+
+        const editBtn = document.createElement('button');
+        editBtn.className = 'edit_btn';
+        editBtn.id = 'edit-btn-' + task.id;
+        editBtn.onclick = () => editTask(task.id);
+        editBtn.textContent = 'Изменить';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn_del';
+        deleteBtn.onclick = () => deleteTask(task.id);
+        deleteBtn.textContent = 'Удалить';
+
+        const subListBtn = document.createElement('button');
+        subListBtn.className = 'sub_list';
+        subListBtn.onclick = () => loadSubtasks(task.id);
+        subListBtn.textContent = 'Подзадачи';
+
+        const commentListBtn = document.createElement('button');
+        commentListBtn.className = 'sub_list';
+        commentListBtn.id = 'cc';
+        commentListBtn.onclick = () => addComment(task.id);
+        commentListBtn.textContent = 'Добавить коментарий';
+
+        const commentBtn = document.createElement('button');
+        commentBtn.className = 'add_com';
+        commentBtn.id = 'cc';
+        commentBtn.onclick = () => loadComments(task.id);
+        commentBtn.textContent = 'Комментарии';
+
+        // добавляем кнопки
+        buttonsContainer.appendChild(editBtn);
+        buttonsContainer.appendChild(deleteBtn);
+        buttonsContainer.appendChild(subBtn);
+        buttonsContainer.appendChild(subListBtn);
+        buttonsContainer.appendChild(commentListBtn);
+        buttonsContainer.appendChild(commentBtn);
+
+        // Собираем контент
+        contentContainer.appendChild(taskText);
+        contentContainer.appendChild(buttonsContainer);
+        
+        div.appendChild(tagsContainer);
+        div.appendChild(contentContainer);
+        div.appendChild(input_all);
         taskList.appendChild(div);
-    })
+
+        // Проверяем статус задачи
+        (async () => {
+            try {
+                const res = await fetch(`/api/subtasks/${task.id}`);
+                const subtasks = await res.json();
+
+                if (subtasks.length > 0) {
+                    const allCompleted = subtasks.every(st => st.isDone);
+                    if (allCompleted) {
+                        div.classList.add('task-completed');
+                        div.querySelector('.task-text').style.textDecoration = 'line-through';
+                    }
+                }
+            } catch (e) {
+                console.error('Ошибка:', e);
+            }
+        })();
+    });
+
+    if (typeof window.restoreTaskTags === 'function') {
+        setTimeout(window.restoreTaskTags, 100);
+    }
+    
 }
 
-async function addTask() { //функция для добавления задачи
+async function addTask() {
     const input = document.getElementById('taskInput');
-    const title = input.value.trim(); //считывает текст, удаляя пробелы вначале и в конце
+    const title = input.value.trim();
     if(!title) return;
-    //отправляем новую задачу на сервер
-    await fetch(API_URL, { 
-        method: 'POST', //запрос для создания новой задачи
-        headers: {'Content-Type': 'application/json'}, //отправляем json
-        body: JSON.stringify({title: title}), //данные в формате json
-    })
+
+    if (title.length > 30) {
+        alert('Длина тега не должна превышать 30 символов');
+        input.value = '';
+        return;
+    }
+
+    await fetch(API_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({title: title}),
+    });
     input.value ='';
     await loadTasks();
 }
-//удаляем задачу с сервера
+
 async function deleteTask(id){
-        await fetch(`${API_URL}/${id}`, {method: 'DELETE'});
-        await loadTasks();
+    await fetch(`${API_URL}/${id}`, {method: 'DELETE'});
+    await loadTasks();
 }
 
-// считываем текст с заметок
-function getTaskTitle(id){
-    return document.querySelector(`#task-title-${id}`).innerText; //innerText - получает текст из заметки
-}
-//объявляем ошибку в самом браузере 
 function showMessage(msg){
     alert(msg);
 }
-//функция обновления статуса задания
+
 function updateTaskStatus(id, isTrue, Title){
-    const title = getTaskTitle(id);
-    //метод запроса изменения текста по id 
     fetch(`/api/tasks/${id}` , {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({id: id, title: Title, isTrue: isTrue}),
     })
-    .then (res => { //после того как обещание завершилось, обрабатываем ответ
-        if(!res.ok) throw new Error('Ошибка при обновлении');
-        loadTasks();
+        .then(res => {
+            if(!res.ok) throw new Error('Ошибка при обновлении');
+            loadTasks();
         })
-    .catch(error => {
-        showMessage(error.message);
-    });
-    return document.querySelector(`#task-title-${id}`).innerText;
+        .catch(error => {
+            showMessage(error.message);
+        });
 }
-//функция по изменению текста
+
 function editTask(id){
     const titleElement = document.querySelector(`#task-title-${id}`);
     const currentTitle = titleElement.innerText;
-    titleElement.innerHTML = `<input type="text" id="edit-input-${id}" value="${currentTitle}">`;
+    titleElement.innerHTML = `<input type="text" id="edit-input-${id}" value="${currentTitle}" style="font-size:1rem; padding:2px;">`;
     const editBtn = document.querySelector(`#edit-btn-${id}`);
     editBtn.innerText = 'Сохранить';
     editBtn.classList.add('save_mode');
     editBtn.onclick = () => SaveTask(id);
 }
-//функция по сохранению текста
+
 function SaveTask(id){
-    const input = document.querySelector(`#edit-input-${id}`); //ищет первый элемент, который соотвеетсвует данному селектору
+    const input = document.querySelector(`#edit-input-${id}`);
     const newTitle = input.value.trim();
-    
-    if(newTitle.trim() === ''){
+
+    if(newTitle === ''){
         showMessage('You must enter title');
         return;
     }
     updateTaskStatus(id, false, newTitle);
 }
+
 loadTasks();

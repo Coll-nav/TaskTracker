@@ -1,39 +1,45 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8"/>
-        <title>Task Tracker</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-        <link rel="stylesheet" href="css/site.css"/>
-    </head>
-    <body>
-        <i class="bi bi-align-top" id="f_i"></i>
-        <div id="title_h1">
-            <h1>Task Tracker</h1>
-        </div>
-        <!--Основное поле для ввода задачи -->
-        <div class="container">
-            <input id="taskInput" type="text" placeholder="Введите задачу" />
-            <button id="add" onclick="addTask()">Добавить</button>
-        </div>
-        <!--Главня задача -->
-        <div class="list_container">
-            <div class="list-header">
-                <h2>Список задач:</h2>
-            </div>
-            <div id="taskList"></div>
-        </div>
-        <!--Для тегов контейнер -->
-        <div>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Task Tracker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/site.css"/>
+</head>
+<body>
+<i class="bi bi-arrow-repeat" id="f_i"></i>
+
+<h1>Task Tracker</h1>
+
+<!-- Основное поле для ввода задачи -->
+<div class="container">
+    <input id="taskInput" type="text" placeholder="Введите задачу" />
+    <button id="add" onclick="addTask()">Добавить</button>
+</div>
+
+<!-- Список задач -->
+<div class="list_container">
+    <div class="list-header">
+        <h2>Список задач:</h2>
+    </div>
+    <div id="taskList"></div>
+</div>
+
+<!-- Секция тегов (под списком задач) -->
+<div class="tags-section">
+    <div class="tags-header">
+        <h3>Теги</h3>
+        <div class="tag-input-container">
             <input id="tagInput" type="text" placeholder="Введите тег" />
             <button onclick="CreatedTag()">Добавить</button>
-            <div id="tags-container">
-                <div class="tags-section"></div>
-            </div>
         </div>
-        <script src="js/site.js"></script>
-        <script src="js/subtask.js"></script>
-        <script src="js/comment.js"></script>
-        <script src="js/tags.js"></script>
-    </body>
+    </div>
+    <div id="tags-container"></div>
+</div>
+
+<script src="js/site.js"></script>
+<script src="js/subtask.js"></script>
+<script src="js/comment.js"></script>
+<script src="js/tags.js"></script>
+</body>
 </html>

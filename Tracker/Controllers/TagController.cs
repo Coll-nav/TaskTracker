@@ -30,10 +30,10 @@ public class TagController : ControllerBase
         if(tag != null) return Conflict();
         _context.Tags.Add(newTag);
         await _context.SaveChangesAsync();
-        return Ok(/*new { message = "Тег создан в системе, теперь можно привязать просто id тега" }*/);
+        return Ok();
     }
 
-    [HttpPost("/api/tasks/{taskId}/tags/{tagId}")] // привязка к самой задаче
+    [HttpPost("tasks/{taskId}/tags/{tagId}")] // привязка к самой задаче
     public async Task<IActionResult> AddTag(int taskId, int tagId)
     {
         var task = await _context.Tasks
@@ -54,7 +54,7 @@ public class TagController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("/api/tasks/{taskId}/tags/{tagId}")]
+    [HttpDelete("tasks/{taskId}/tags/{tagId}")]
     public async Task<IActionResult> RemoveTag(int taskId, int tagId)
     {
         var task = await _context.Tasks
@@ -67,3 +67,4 @@ public class TagController : ControllerBase
         return NoContent();
     }
 }
+

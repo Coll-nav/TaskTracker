@@ -31,19 +31,20 @@ public class CommentController : ControllerBase
         var parentTask = await _context.Tasks.FindAsync(taskId);
         if (parentTask == null) return NotFound();
         comment.TaskId =  taskId;
+        comment.CreatedAt = DateTime.Now;
         _context.Comments.Add(comment);
         await _context.SaveChangesAsync();
         return Ok(new {message = "Комментарий успешно создан"});
     }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteComment(int id)
+    
+    [HttpDelete("{taskId}")]
+    public async Task<IActionResult> DeleteComments(int taskId)
     {
-        var comment = await _context.Comments.FindAsync(id);
-        if (comment == null) return NotFound();
-        _context.Comments.Remove(comment);
+        var comments = await _context.Comments
+            .Where(c => c.TaskId == taskId)
+            .ToListAsync();
+        _context.Comments.RemoveRange(comments);
         await _context.SaveChangesAsync();
         return NoContent();
     }
-    
 }
