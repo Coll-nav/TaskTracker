@@ -16,10 +16,13 @@ public class TaskItem
     public string? Title { get; set; } //название
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime? Deadline { get; set; }
+    public DateTime? isDonedAt { get; set; }
     public Status Status { get; set; }
     
     public ICollection<SubTask> SubTasks { get; set; } = new List<SubTask>();
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     public ICollection<TaskStatusHistory> TaskStatusHistories { get; set; } = new List<TaskStatusHistory>();
     public ICollection<Tag> Tags { get; set; } = new List<Tag>();
+    public ICollection<TaskFile> Files { get; set; } = new List<TaskFile>();
 }

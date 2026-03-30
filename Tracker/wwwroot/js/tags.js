@@ -278,6 +278,17 @@ async function CreatedTag() {
     }
 
     try {
+        const resCheck = await fetch('/api/tags');
+        const existingTags = await resCheck.json();
+
+        const tagExists = existingTags.some(tag => tag.name.toLowerCase() === text.toLowerCase());
+
+        if (tagExists) {
+            alert('Тег с таким названием уже существует!');
+            input.value = '';
+            return;
+        }
+        
         const res = await fetch('/api/tags', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},

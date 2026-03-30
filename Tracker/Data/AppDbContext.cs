@@ -10,4 +10,5 @@ public class AppDbContext: DbContext
     public DbSet<Comment> Comments { get; set; }
     public DbSet<TaskStatusHistory> TaskStatusHistories { get; set; }
     public DbSet<Tag> Tags { get; set; }
+    public DbSet<TaskFile> TaskFiles { get; set; }
 }

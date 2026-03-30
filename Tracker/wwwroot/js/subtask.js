@@ -23,8 +23,25 @@ const saveArr = {
 }
 
 async function loadSubtasks(taskId) {
-    
     const taskDiv = document.getElementById('task-list-' + taskId);
+
+    const sb = taskDiv.querySelectorAll('.subtask');
+    
+    const cm = taskDiv.querySelectorAll('.comment-item');
+    let flag = false;
+    
+    if(sb.length === 0 && cm.length > 0) {
+        const oldComments = taskDiv.querySelectorAll('.comment-item, .sub_btn_b, .comment-buttons, .comments-container');
+        oldComments.forEach(comment => comment.remove());
+        flag = true;
+    }
+
+    //на повтороное нажатие кнопки
+    const existingSubtasks = taskDiv.querySelectorAll('.subtask');
+    if (existingSubtasks.length > 0) {
+        return;
+    }
+
     const oldSubtasks = taskDiv.querySelectorAll('.subtask');
     oldSubtasks.forEach(sub => sub.remove());
 
@@ -36,13 +53,27 @@ async function loadSubtasks(taskId) {
     const subtasksList = document.getElementById('task-list-' + taskId);
     
     if(subtasks.length === 0){
-        subtasksList.innerHTML = `<div>Нет подзадач</div>
-        <button class="sub_btn" onclick="loadTasks()"><-----</button>`;
+        const existingMsg = subtasksList.querySelector('.no-subtasks-msg');
+        if(!existingMsg) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'no-subtasks-msg';
+            msgDiv.textContent = '📭 Нет подзадач';
+            msgDiv.style.padding = '10px';
+            msgDiv.style.color = '#6b7280';
+            msgDiv.style.fontStyle = 'italic';
+            subtasksList.appendChild(msgDiv);
+
+            const commentsContainer = subtasksList.querySelector('.comments-container');
+            if (commentsContainer) {
+                subtasksList.insertBefore(msgDiv, commentsContainer);
+            } else {
+                subtasksList.appendChild(msgDiv);
+            }
+        }
         return;
     }
 
     const subtaskDiv = [];
-    const ListClose = document.createElement('button');
 
     subtasks.forEach(subtask => {
         const div = document.createElement('div');
@@ -56,7 +87,7 @@ async function loadSubtasks(taskId) {
         checkbox.type = 'checkbox';
         checkbox.checked = subtask.isDone;
         checkbox.onchange = () => StatusSubtask(taskId, subtask.subTaskId, checkbox);
-        
+
         const span = document.createElement('span');
         span.className = 'sub-task-text';
         span.id = `subtask-${subtask.subTaskId}`;
@@ -69,14 +100,48 @@ async function loadSubtasks(taskId) {
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'sub_btn_del';
         deleteBtn.onclick = () => DeleteSubTask(taskId, subtask.subTaskId);
-        deleteBtn.textContent = 'Удалить';
+        deleteBtn.textContent = '🗑️';
 
         div.appendChild(checkbox);
         div.appendChild(span);
         div.appendChild(deleteBtn);
-        subtasksList.appendChild(div);
         subtaskDiv.push(div);
     })
+    
+    // Очищаем subtasksList от старых элементов
+    const oldContent = subtasksList.querySelectorAll('.subtask, .listClose, .subtask-separator');
+    oldContent.forEach(el => el.remove());
+
+// Создаем линию-разделитель
+    const separator = document.createElement('div');
+    separator.className = 'subtask-separator';
+    subtasksList.appendChild(separator);
+
+// Добавляем подзадачи
+    subtaskDiv.forEach(div => {
+        subtasksList.appendChild(div);
+    });
+
+    const ListClose = document.createElement('div');
+    ListClose.className = 'listClose';
+    ListClose.innerHTML = `Скрыть список подзадач`;
+    ListClose.onclick = () => {
+        clean(ListClose, taskId);
+    }
+    subtasksList.appendChild(ListClose);
+    
+
+// Удаляем старые комментарии и сообщения
+    const oldComments = subtasksList.querySelectorAll('.comments-container, .comment-buttons, .comment-item, .no-comments-msg');
+    oldComments.forEach(el => el.remove());
+
+
+    if (flag) {
+        await loadComments(taskId);
+    }
+    
+    
+
     saveArr.saveArray(subtaskDiv, taskId);
 
     let count = 0;
@@ -86,21 +151,25 @@ async function loadSubtasks(taskId) {
         }
     })
 
+    if(flag){
+        await loadComments(taskId);
+    }
+
     const taskDiv2 = document.getElementById('task-list-' + taskId);
     const taskText = taskDiv2.querySelector('.task-text');
-    
+
     const oldTime = taskDiv2.querySelector('.task-completed-time');
     if (oldTime) oldTime.remove();
 
     if(subtasks.length === count && subtasks.length > 0){
         taskDiv2.classList.add('task-completed');
         taskText.style.textDecoration = 'line-through';
-        
+
         await fetch(`/api/tasks/${taskId}/complete`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}
         });
-        
+
         const now = new Date();
         const timeDiv = document.createElement('div');
         timeDiv.className = 'task-completed-time';
@@ -110,19 +179,12 @@ async function loadSubtasks(taskId) {
     } else{
         taskDiv2.classList.remove('task-completed');
         taskText.style.textDecoration = 'none';
-        
+
         await fetch(`/api/tasks/${taskId}/incomplete`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}
         });
     }
-
-    ListClose.className = 'listClose';
-    ListClose.innerHTML = `Скрыть список подзадач`;
-    ListClose.onclick = () => {
-        clean(ListClose, taskId);
-    }
-    subtasksList.appendChild(ListClose);
 }
 
 async function StatusSubtask(taskId, subTaskId, checkbox) {
@@ -146,8 +208,6 @@ async function StatusSubtask(taskId, subTaskId, checkbox) {
     }
 
     await checkAllSubtasksCompleted(taskId);
-
-    // ИСПРАВЛЕНО: убрал loadSubtasks отсюда, чтобы избежать повторения 
 }
 
 async function checkAllSubtasksCompleted(taskId) {
@@ -162,7 +222,6 @@ async function checkAllSubtasksCompleted(taskId) {
     const taskDiv = document.getElementById('task-list-' + taskId);
     const taskText = taskDiv.querySelector('.task-text');
 
-    // Удаляем старую метку времени
     const oldTime = taskDiv.querySelector('.task-completed-time');
     if (oldTime) oldTime.remove();
 
@@ -170,7 +229,6 @@ async function checkAllSubtasksCompleted(taskId) {
         taskDiv.classList.add('task-completed');
         taskText.style.textDecoration = 'line-through';
 
-        // Отправляем на сервер
         const response = await fetch(`/api/tasks/${taskId}/complete`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}
@@ -178,7 +236,6 @@ async function checkAllSubtasksCompleted(taskId) {
 
         if (response.ok) {
             const data = await response.json();
-            // Показываем время с сервера
             const timeDiv = document.createElement('div');
             timeDiv.className = 'task-completed-time';
             const date = new Date(data.completedAt);
@@ -205,13 +262,22 @@ function clean(ListClose, taskId){
         });
         divs.length = 0;
     }
+
+    const taskDiv = document.getElementById(`task-list-${taskId}`);
+
+    // Удаляем линию
+    const separator = taskDiv.querySelector('.subtask-separator');
+    if(separator) {
+        separator.remove();
+    }
+    
     if(ListClose && ListClose.remove) {
         ListClose.remove();
     }
 }
 
 async function AddSubTask(taskId) {
-    const input = document.getElementById(`task-right-container-${taskId}`);
+    const input = document.getElementById(`task-top-container-${taskId}`);
     const text = input.value.trim();
 
     if(text === ""){
@@ -237,6 +303,9 @@ async function AddSubTask(taskId) {
 
     input.value = '';
     saveArr.cleanDiv(taskId);
+    const taskDiv = document.getElementById(`task-list-${taskId}`);
+    const noMsg = taskDiv.querySelector('.no-subtasks-msg');
+    if (noMsg) noMsg.remove();
     await loadSubtasks(taskId);
 }
 

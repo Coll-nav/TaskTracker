@@ -1,45 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Task Tracker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Tracker - Вход</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/site.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
 </head>
 <body>
-<i class="bi bi-arrow-repeat" id="f_i"></i>
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>Task Tracker</h1>
+            <p>Войдите в систему</p>
+        </div>
 
-<h1>Task Tracker</h1>
+        <div class="auth-tabs">
+            <button class="tab-btn active" data-role="admin">Администратор</button>
+            <button class="tab-btn" data-role="user">Пользователь</button>
+        </div>
 
-<!-- Основное поле для ввода задачи -->
-<div class="container">
-    <input id="taskInput" type="text" placeholder="Введите задачу" />
-    <button id="add" onclick="addTask()">Добавить</button>
-</div>
+        <div class="auth-form" id="adminForm">
+            <div class="input-group">
+                <i class="bi bi-person"></i>
+                <input type="text" id="adminLogin" placeholder="Логин" value="admin">
+            </div>
+            <div class="input-group">
+                <i class="bi bi-lock"></i>
+                <input type="password" id="adminPassword" placeholder="Пароль" value="admin123">
+            </div>
+            <div class="info-text">
+                <i class="bi bi-info-circle"></i>
+                <span>Демо-логин: admin / admin123</span>
+            </div>
+            <button class="auth-btn" onclick="login('admin')">Войти как Администратор</button>
+        </div>
 
-<!-- Список задач -->
-<div class="list_container">
-    <div class="list-header">
-        <h2>Список задач:</h2>
-    </div>
-    <div id="taskList"></div>
-</div>
+        <div class="auth-form hidden" id="userForm">
+            <div class="input-group">
+                <i class="bi bi-person"></i>
+                <input type="text" id="userLogin" placeholder="Логин" value="user">
+            </div>
+            <div class="input-group">
+                <i class="bi bi-lock"></i>
+                <input type="password" id="userPassword" placeholder="Пароль" value="user123">
+            </div>
+            <div class="info-text">
+                <i class="bi bi-info-circle"></i>
+                <span>Демо-логин: user / user123</span>
+            </div>
+            <button class="auth-btn" onclick="login('user')">Войти как Пользователь</button>
+        </div>
 
-<!-- Секция тегов (под списком задач) -->
-<div class="tags-section">
-    <div class="tags-header">
-        <h3>Теги</h3>
-        <div class="tag-input-container">
-            <input id="tagInput" type="text" placeholder="Введите тег" />
-            <button onclick="CreatedTag()">Добавить</button>
+        <div class="auth-footer">
+            <span>Версия 1.0</span>
         </div>
     </div>
-    <div id="tags-container"></div>
 </div>
-
-<script src="js/site.js"></script>
-<script src="js/subtask.js"></script>
-<script src="js/comment.js"></script>
-<script src="js/tags.js"></script>
 </body>
 </html>

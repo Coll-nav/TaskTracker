@@ -4,6 +4,8 @@ public  class TaskListItemDto
     public string Title { get; set; }
     public string Status { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime? Deadline { get; set; }
+    public DateTime? isDonedAt { get; set; }
     public int SubTaskCount { get; set; }
     public int SubTaskCountDone { get; set; }
     public int CommentsCount { get; set; }

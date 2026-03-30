@@ -42,3 +42,4 @@ packages/
 *.tmp
 *.temp
 [Tt]emp/
+Uploads/
