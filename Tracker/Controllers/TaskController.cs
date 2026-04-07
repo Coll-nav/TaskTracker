@@ -1,5 +1,7 @@
 // Controllers/TasksController.cs
 
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +10,7 @@ using Tracker.Data;
 
 namespace TaskTracker.Api.Controllers;
 
+[Authorize]
 [ApiController] // главный атрибут для пользования другими
 [Route("api/[controller]")]
 public class TasksController : ControllerBase
@@ -30,7 +33,15 @@ public class TasksController : ControllerBase
         [FromQuery] int pageSize = 7
     )
     {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        var role = User.FindFirst(ClaimTypes.Role).Value;
+        
         var query = _context.Tasks.AsQueryable();
+
+        if (role != "admin")
+        {
+            query = query.Where(i => i.UserId == userId);
+        }
 
         if (status.HasValue) query = query.Where(t => t.Status == status.Value); //фильтр по статусу
         if (id.HasValue) query = query.Where(t => t.Id == id.Value); // фильтр по id
@@ -70,6 +81,9 @@ public class TasksController : ControllerBase
     [HttpPost] //добавление задачи 
     public async Task<IActionResult> AddTask([FromBody] TaskItem task)
     {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        
+        task.UserId = userId;
         task.SubTasks = new List<SubTask>();
         task.Tags = new List<Tag>();
         task.Comments = new List<Comment>();

@@ -1077,3 +1077,80 @@ input[id^="task-bottom-container-"]:focus {
   background: var(--gray-100);
   bottom: 140px;
 }
+/* Имя пользователя */
+.user-name {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #4b5563;
+  background: transparent;
+  padding: 0;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+/* Кнопка выхода */
+.logout-btn {
+  position: absolute;
+  right: 70px;
+  top: 27px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+}
+#userNameDisplay{
+  position: absolute;
+  left: auto;
+  top: 27px;
+}
+.admin-panel {
+  position: fixed;
+  top: 240px;
+  left: 20px;
+  background: white;
+  border-radius: 12px;
+  padding: 10px 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid var(--gray-200);
+  z-index: 100;
+  max-width: 295px;
+}
+
+.admin-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-selector label {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+}
+
+.user-select {
+  padding: 6px 12px;
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: white;
+  cursor: pointer;
+}
+
+.user-select:hover {
+  border-color: var(--primary);
+}

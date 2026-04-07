@@ -20,6 +20,10 @@ public class TaskItem
     public DateTime? isDonedAt { get; set; }
     public Status Status { get; set; }
     
+    public int UserId { get; set; }
+    
+    public User? User { get; set; } //ключ для связи one to many 
+    
     public ICollection<SubTask> SubTasks { get; set; } = new List<SubTask>();
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     public ICollection<TaskStatusHistory> TaskStatusHistories { get; set; } = new List<TaskStatusHistory>();

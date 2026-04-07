@@ -7,9 +7,21 @@
     <link rel="stylesheet" href="css/site.css"/>
 </head>
 <body>
+<div class="admin-panel" id="adminPanel" style="display: none;">
+    <div class="admin-selector">
+        <label>👥 Выбрать пользователя:</label>
+        <select id="userSelect" class="user-select" onchange="onUserSelect()">
+            <option value="">-- Все пользователи --</option>
+        </select>
+    </div>
+</div>
 <i class="bi bi-arrow-repeat" id="f_i"></i>
 
 <h1>Task Tracker</h1>
+<div class="header-right">
+    <span class="user-name" id="userNameDisplay"></span>
+    <button class="logout-btn" onclick="logout()">Выйти</button>
+</div>
 
 <!-- Основное поле для ввода задачи -->
 <div class="container">
@@ -55,7 +67,6 @@
         </div>
     </div>
 </div>
-
 <script src="js/site.js"></script>
 <script src="js/subtask.js"></script>
 <script src="js/comment.js"></script>
